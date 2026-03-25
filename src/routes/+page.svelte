@@ -1,51 +1,60 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
 	import { onMount } from 'svelte';
-	import { listRecentMecha } from '$lib/storage/recent-mecha';
-	import { reopenRecentMecha } from '$lib/storage/reopen';
+	import { listRecentHangar } from '$lib/storage/recent-hangar';
+	import { reopenRecentHangar } from '$lib/storage/reopen';
 	import { Button } from '@/components/shadcn/button';
 	import { resolve } from '$app/paths';
+	import Banner from '$lib/assets/banner.svg';
+	import type { RecentHangarRecord } from '@/types/storage';
 
-	let recentMechas = $state([]);
+	let recenthangars: RecentHangarRecord[] = $state([]);
 
 	onMount(async () => {
-		recentMechas = await listRecentMecha();
+		recenthangars = await listRecentHangar();
 	});
 
-	const openRecent = async (mechaId: string) => {
-		const result = await reopenRecentMecha(mechaId);
+	const openRecent = async (hangarId: string) => {
+		const result = await reopenRecentHangar(hangarId);
 
 		if (result.source === 'file') {
-			console.log('Opened from file', result.mecha);
+			console.log('Opened from file', result.hangar);
 		} else if (result.source === 'draft') {
-			console.log('Opened from draft', result.mecha);
+			console.log('Opened from draft', result.hangar);
 		} else {
-			console.log('Mecha could not be reopened');
+			console.log('hangar could not be reopened');
 		}
 	};
+
+	const onOpenHangar = () => {};
 </script>
 
 <div class="flex flex-col mx-auto my-6 justify-between max-w-4xl">
-	<h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">Home</h1>
-
-	<p>{$t('welcome', { values: { title: $t('title') }})}</p>
-
-	<Button href={resolve('/mecha/create')} class="my-8 w-48">{$t('mecha.create_new_mecha')}</Button>
+	<img src={Banner} alt={$t('title')} class="w-full" />
 
 	<h2 class="scroll-m-20 border-b pb-2 my-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
-		{$t('mecha.recent_mechas')}
+		{$t('terms.actions')}
 	</h2>
-	{#if recentMechas.length === 0 }
-		<p><em>{$t('mecha.no_recent_mechas')}</em></p>
+
+	<div class="flex flex-wrap gap-8 mt-4 mb-8">
+		<Button href={resolve('/hangar/create')} class="w-48">{$t('hangar.create_new_hangar')}</Button>
+		<Button class="w-48" onclick={onOpenHangar}>{$t('hangar.open_hangar')}</Button>
+	</div>
+
+	<h2 class="scroll-m-20 border-b pb-2 my-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+		{$t('hangar.recent_hangars')}
+	</h2>
+	{#if recenthangars.length === 0 }
+		<p><em>{$t('hangar.no_recent_hangars')}</em></p>
 	{:else}
 		<ul>
-			{#each recentMechas as mecha (mecha.mechaId)}
+			{#each recenthangars as hangar (hangar.hangarId)}
 				<li>
-					<button onclick={() => openRecent(mecha.mechaId)}>
-						{mecha.name}
-					</button>
+					<Button onclick={() => openRecent(hangar.hangarId)}>
+						{hangar.name}
+					</Button>
 					<small>
-						{mecha.hasDraft ? 'Draft available' : 'Saved file'}
+						{hangar.hasDraft ? 'Draft available' : 'Saved file'}
 					</small>
 				</li>
 			{/each}

@@ -1,27 +1,27 @@
 import { getDb } from './db';
-import type { MechaProject, DraftMechaRecord } from '$lib/types/storage';
+import type { Hangar, DraftHangarRecord } from '$lib/types/storage';
 import { SvelteDate } from 'svelte/reactivity';
 
-export const saveDraft = async (project: MechaProject) => {
+export const saveDraft = async (project: Hangar) => {
 	const db = await getDb();
 
-	const record: DraftMechaRecord = {
-		mechaId: project.core.id,
+	const record: DraftHangarRecord = {
+		hangarId: project.core.id,
 		updatedAt: new SvelteDate().toISOString(),
-		data: $state.snapshot(project),
+		data: $state.snapshot(project)
 	};
 
-	await db.put('drafts', record, record.mechaId);
+	await db.put('drafts', record, record.hangarId);
 };
 
-export const loadDraft = async (mechaId: string) => {
+export const loadDraft = async (hangarId: string) => {
 	const db = await getDb();
-	return db.get('drafts', mechaId);
+	return db.get('drafts', hangarId);
 };
 
-export const deleteDraft = async (mechaId: string) => {
+export const deleteDraft = async (hangarId: string) => {
 	const db = await getDb();
-	await db.delete('drafts', mechaId);
+	await db.delete('drafts', hangarId);
 };
 
 export const listDrafts = async () => {

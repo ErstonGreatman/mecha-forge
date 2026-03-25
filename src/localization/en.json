@@ -2,6 +2,15 @@
 	"title": "Mecha Forge",
 	"home": "Home",
 	"welcome": "Welcome to {title}!",
+	"hangar": {
+		"create_new_hangar": "Create New Hangar",
+		"delete_hangar": "Delete Hangar",
+		"recent_hangars": "Recent Hangars",
+		"no_recent_hangars": "No recent hangars",
+		"no_hangars_found": "No Hangars found",
+		"open_hangar": "Open Hangar",
+		"new_hangar": "New Hangar"
+	},
 	"mecha": {
 		"create_new_mecha": "Create New Mecha",
 		"delete_mecha": "Delete Mecha",
@@ -28,6 +37,7 @@
 		"save": "Save",
 		"export": "Export",
 		"open": "Open",
-		"new": "New"
+		"new": "New",
+		"actions": "Actions"
 	}
 }

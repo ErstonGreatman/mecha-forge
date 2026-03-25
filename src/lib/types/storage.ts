@@ -1,6 +1,6 @@
 import type { CoreSchematic } from '$lib/types/core';
 
-export type MechaProject = {
+export type Hangar = {
 	core: CoreSchematic;
 	systems: Array<{
 		id: string;
@@ -10,14 +10,14 @@ export type MechaProject = {
 	}>;
 };
 
-export type DraftMechaRecord = {
-	mechaId: string;
+export type DraftHangarRecord = {
+	hangarId: string;
 	updatedAt: string;
-	data: MechaProject;
+	data: Hangar;
 };
 
-export type RecentMechaRecord = {
-	mechaId: string;
+export type RecentHangarRecord = {
+	hangarId: string;
 	name: string;
 	lastOpenedAt: string;
 	systemIds: string[];

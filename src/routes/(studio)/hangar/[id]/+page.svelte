@@ -5,11 +5,11 @@
 	import { Button } from '@/components/shadcn/button';
 </script>
 
-{#if !appState.mecha}
+{#if !appState.hangar}
 	<div>
-		<p>{$t('mecha.no_mecha_found')}</p>
-		<Button href={resolve('/mecha/create')} class="my-8 w-48">{$t('mecha.create_new_mecha')}</Button>
+		<p>{$t('hangar.no_hangars_found')}</p>
+		<Button href={resolve('/hangar/create')} class="my-8 w-48">{$t('hangar.create_new_hangar')}</Button>
 	</div>
 {:else}
-	<h1 class="text-4xl">{appState.mecha.core.name}</h1>
+	<h2 class="text-3xl">Placeholder</h2>
 {/if}

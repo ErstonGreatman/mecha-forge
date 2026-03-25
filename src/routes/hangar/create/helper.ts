@@ -2,13 +2,13 @@ import { goto } from '$app/navigation';
 import { appState } from '$lib/states/app-state.svelte';
 import { resolve } from '$app/paths';
 import { saveDraft } from '$lib/storage/drafts.svelte';
-import { upsertRecentMecha } from '$lib/storage/recent-mecha';
+import { upsertRecentHangar } from '$lib/storage/recent-hangar';
 
-export const createMechaProject = async (event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) => {
+export const createHangar = async (event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) => {
 	event.preventDefault();
 	const formData = new FormData(event.currentTarget, event.submitter);
 
-	appState.mecha = {
+	appState.hangar = {
 		core: {
 			id: '0',
 			name: formData.get('name') as string,
@@ -19,11 +19,11 @@ export const createMechaProject = async (event: SubmitEvent & { currentTarget: E
 		systems: []
 	};
 
-	await saveDraft(appState.mecha);
-	await upsertRecentMecha({
-		mecha: appState.mecha,
+	await saveDraft(appState.hangar);
+	await upsertRecentHangar({
+		hangar: appState.hangar,
 		hasDraft: true,
-		lastSaveSource: 'draft',
-	})
-	await goto(resolve(`/mecha/${appState.mecha.core.id}/`));
+		lastSaveSource: 'draft'
+	});
+	await goto(resolve(`/hangar/${appState.hangar.core.id}/`));
 };

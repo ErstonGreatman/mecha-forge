@@ -1,62 +1,62 @@
-import type { MechaProject } from '$lib/types/storage';
-import { upsertRecentProject } from './recent-mecha.ts';
+import type { Hangar } from '$lib/types/storage';
+import { upsertRecentHangar } from './recent-hangar.ts';
 import { saveDraft, deleteDraft } from './drafts.svelte.ts';
 
-export async function saveProjectAs(project: MechaProject) {
+export async function saveHangarAs(hangar: Hangar) {
 	const handle = await window.showSaveFilePicker({
-		suggestedName: `${project.core.title || 'untitled'}.mecha.json`,
+		suggestedName: `${hangar.core.name || 'untitled'}.hangar.json`,
 		types: [
 			{
-				description: 'Mecha Project',
+				description: 'Mecha Hangar',
 				accept: {
-					'application/json': ['.json', '.mecha.json']
+					'application/json': ['.json', '.hangar.json']
 				}
 			}
 		]
 	});
 
-	await writeProjectToHandle(handle, project);
+	await writeHangarToHandle(handle, hangar);
 
-	await upsertRecentProject({
-		project,
+	await upsertRecentHangar({
+		hangar,
 		hasDraft: false,
 		lastSaveSource: 'file',
 		fileHandle: handle
 	});
 
-	await deleteDraft(project.core.id);
+	await deleteDraft(hangar.core.id);
 
 	return handle;
 }
 
-export async function saveProjectToExistingFile(
-	project: MechaProject,
+export async function saveHangarToExistingFile(
+	hangar: Hangar,
 	handle: FileSystemFileHandle
 ) {
-	await writeProjectToHandle(handle, project);
+	await writeHangarToHandle(handle, hangar);
 
-	await upsertRecentProject({
-		project,
+	await upsertRecentHangar({
+		hangar,
 		hasDraft: false,
 		lastSaveSource: 'file',
 		fileHandle: handle
 	});
 
-	await deleteDraft(project.core.id);
+	await deleteDraft(hangar.core.id);
 }
 
-export async function autosaveProject(project: MechaProject) {
-	await saveDraft(project);
+export async function autosaveHangar(hangar: Hangar) {
+	await saveDraft(hangar);
 
-	await upsertRecentProject({
-		project,
+	await upsertRecentHangar({
+		hangar,
 		hasDraft: true,
 		lastSaveSource: 'draft'
 	});
 }
 
-async function writeProjectToHandle(handle: FileSystemFileHandle, project: MechaProject) {
+async function writeHangarToHandle(handle: FileSystemFileHandle, hangar: Hangar) {
 	const writable = await handle.createWritable();
-	await writable.write(JSON.stringify(project, null, 2));
+	await writable.write(JSON.stringify(hangar, null, 2));
 	await writable.close();
 }

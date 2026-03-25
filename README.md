@@ -99,7 +99,7 @@ This is currently a **foundation-first project**.
 
 ```bash
 git clone https://github.com/yourname/mecha-studio
-cd mecha-studio
+cd hangar-studio
 npm install
 npm run dev
 ```

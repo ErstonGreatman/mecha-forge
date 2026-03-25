@@ -1,6 +1,6 @@
-import { getRecentMecha } from './recent-mecha.ts';
+import { getRecentHangar } from './recent-hangar.ts';
 import { loadDraft } from './drafts.svelte.ts';
-import type { MechaProject } from '$lib/types/storage';
+import type { Hangar } from '$lib/types/storage';
 
 const canReadHandle = async (handle: FileSystemFileHandle) => {
 	const permission = await handle.queryPermission({ mode: 'read' });
@@ -10,14 +10,14 @@ const canReadHandle = async (handle: FileSystemFileHandle) => {
 	return requested === 'granted';
 };
 
-export const reopenRecentMecha = async (
-	mechaId: string
+export const reopenRecentHangar = async (
+	hangarId: string
 ): Promise<
-	| { source: 'file'; mecha: MechaProject; fileHandle: FileSystemFileHandle }
-	| { source: 'draft'; mecha: MechaProject }
+	| { source: 'file'; hangar: Hangar; fileHandle: FileSystemFileHandle }
+	| { source: 'draft'; hangar: Hangar }
 	| { source: 'missing' }
 > => {
-	const recent = await getRecentMecha(mechaId);
+	const recent = await getRecentHangar(hangarId);
 
 	if (!recent) {
 		return { source: 'missing' };
@@ -29,22 +29,22 @@ export const reopenRecentMecha = async (
 		if (allowed) {
 			const file = await recent.fileHandle.getFile();
 			const text = await file.text();
-			const mecha = JSON.parse(text) as MechaProject;
+			const hangar = JSON.parse(text) as Hangar;
 
 			return {
 				source: 'file',
-				mecha,
+				hangar,
 				fileHandle: recent.fileHandle
 			};
 		}
 	}
 
-	const draft = await loadDraft(mechaId);
+	const draft = await loadDraft(hangarId);
 
 	if (draft) {
 		return {
 			source: 'draft',
-			mecha: draft.data
+			hangar: draft.data
 		};
 	}
 
